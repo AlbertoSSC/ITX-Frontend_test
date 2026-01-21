@@ -1,0 +1,88 @@
+.actions {
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 1rem;
+  padding: 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+}
+
+.title {
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #fff;
+  margin: 0 0 1.25rem 0;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.selectorGroup {
+  margin-bottom: 1.25rem;
+}
+
+.label {
+  display: block;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+}
+
+.select {
+  width: 100%;
+  padding: 1rem;
+  color: #fff;
+  font-size: 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: 0.75rem;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.select:hover {
+  border-color: rgba(233, 69, 96, 0.5);
+}
+
+.select:focus {
+  outline: none;
+  border-color: #e94560;
+  box-shadow: 0 0 0 3px rgba(233, 69, 96, 0.2);
+}
+
+.select option {
+  background: #1a1a2e;
+  color: #fff;
+}
+
+.addButton {
+  width: 100%;
+  padding: 1rem 1.5rem;
+  background: linear-gradient(135deg, #e94560 0%, #ff6b8a 100%);
+  border: none;
+  border-radius: 0.75rem;
+  color: #fff;
+  font-size: 1.rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  margin-top: 0.5rem;
+}
+
+.addButton:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 1px 8px rgba(233, 69, 96, 0.5);
+}
+
+.addButton:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.addButton.added {
+  background: linear-gradient(135deg, #00c853 0%, #69f0ae 100%);
+}
+
+.error {
+  color: #ff6b6b;
+  font-size: 0.9rem;
+  margin-top: 0.75rem;
+  text-align: center;
+}

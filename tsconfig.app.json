@@ -15,6 +15,13 @@
     "moduleDetection": "force",
     "noEmit": true,
     "jsx": "react-jsx",
+    "baseUrl": ".",
+    "paths": {
+      "@/*": ["./src/*"],
+      "@/components": ["./src/components"],
+      "@/pages": ["./src/pages"],
+      "@/types": ["./src/types"],
+    },
 
     /* Linting */
     "strict": true,

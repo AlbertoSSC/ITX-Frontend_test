@@ -1,0 +1,26 @@
+.imageContainer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  min-height: 400px;
+  border-radius: 1.5rem;
+  background: #e8e8ed;
+}
+
+.image {
+  max-width: 100%;
+  max-height: 350px;
+  object-fit: contain;
+}
+
+@media (max-width: 900px) {
+  .imageContainer {
+    min-height: 300px;
+    padding: 1.5rem;
+  }
+
+  .image {
+    max-height: 250px;
+  }
+}
