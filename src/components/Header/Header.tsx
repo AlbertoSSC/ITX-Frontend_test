@@ -37,25 +37,43 @@ export const Header = () => {
         <span className={styles.logoText}>Mobile Store</span>
       </Link>
 
-      <nav className={styles.breadcrumbs} aria-label="Navigation Breadcrumbs">
-        {breadcrumbs.map((crumb, index) => (
-          <span key={crumb.path}>
-            {index > 0 && <span className={styles.separator}>/</span>}
-            {index === breadcrumbs.length - 1 ? (
-              <span className={styles.currentPage}>{crumb.label}</span>
-            ) : (
-              <Link to={crumb.path} className={styles.breadcrumbLink}>
-                {crumb.label}
-              </Link>
-            )}
-          </span>
-        ))}
+      <nav className={styles.breadcrumbs} aria-label="Breadcrumb">
+        <ol className={styles.breadcrumbList}>
+          {breadcrumbs.map((crumb, index) => {
+            const isCurrentPage = index === breadcrumbs.length - 1;
+            return (
+              <li key={crumb.path} className={styles.breadcrumbItem}>
+                {index > 0 && (
+                  <span className={styles.separator} aria-hidden="true">
+                    /
+                  </span>
+                )}
+                {isCurrentPage ? (
+                  <span className={styles.currentPage} aria-current="page">
+                    {crumb.label}
+                  </span>
+                ) : (
+                  <Link to={crumb.path} className={styles.breadcrumbLink}>
+                    {crumb.label}
+                  </Link>
+                )}
+              </li>
+            );
+          })}
+        </ol>
       </nav>
 
-      <div className={styles.cart}>
-        <span className={styles.cartIcon}>🛒</span>
+      <div
+        className={styles.cart}
+        role="status"
+        aria-label={`Shopping cart: ${cartCount || 0} items`}
+      >
+        <span className={styles.cartIcon} aria-hidden="true">
+          🛒
+        </span>
         <span className={styles.cartCount}>{cartCount || 0}</span>
       </div>
     </header>
   );
 };
+

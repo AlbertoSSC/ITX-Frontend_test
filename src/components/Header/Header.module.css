@@ -41,6 +41,19 @@
   color: rgba(255, 255, 255, 0.7);
 }
 
+.breadcrumbList {
+  display: flex;
+  align-items: center;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumbItem {
+  display: flex;
+  align-items: center;
+}
+
 .separator {
   color: rgba(255, 255, 255, 0.4);
   margin: 0 0.25rem;

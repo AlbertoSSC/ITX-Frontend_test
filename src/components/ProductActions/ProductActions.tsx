@@ -51,50 +51,72 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
     }
   };
 
+  const isDisabled =
+    isAdding || added || selectedColor === "" || selectedStorage === "";
+
   return (
-    <div className={styles.actions}>
-      <h2 className={styles.title}>Options</h2>
+    <section className={styles.actions} aria-labelledby="options-title">
+      <h2 id="options-title" className={styles.title}>
+        Options
+      </h2>
 
-      <div className={styles.selectorGroup}>
-        <label className={styles.label}>Color</label>
-        <select
-          className={styles.select}
-          value={selectedColor}
-          onChange={(e) => setSelectedColor(e.target.value)}
-        >
-          {colors.map((color, index) => (
-            <option key={`color_${color}_${index}`} value={color}>
-              {color}
-            </option>
-          ))}
-        </select>
-      </div>
+      <fieldset className={styles.fieldset}>
+        <legend className="visually-hidden">Product configuration</legend>
 
-      <div className={styles.selectorGroup}>
-        <label className={styles.label}>Storage</label>
-        <select
-          className={styles.select}
-          value={selectedStorage}
-          onChange={(e) => setSelectedStorage(e.target.value)}
-        >
-          {internalMemory.map((storage, index) => (
-            <option key={`internalMemory_${storage}_${index}`} value={storage}>
-              {storage}
-            </option>
-          ))}
-        </select>
-      </div>
+        <div className={styles.selectorGroup}>
+          <label htmlFor="color-select" className={styles.label}>
+            Color
+          </label>
+          <select
+            id="color-select"
+            className={styles.select}
+            value={selectedColor}
+            onChange={(e) => setSelectedColor(e.target.value)}
+          >
+            {colors.map((color, index) => (
+              <option key={`color_${color}_${index}`} value={color}>
+                {color}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className={styles.selectorGroup}>
+          <label htmlFor="storage-select" className={styles.label}>
+            Storage
+          </label>
+          <select
+            id="storage-select"
+            className={styles.select}
+            value={selectedStorage}
+            onChange={(e) => setSelectedStorage(e.target.value)}
+          >
+            {internalMemory.map((storage, index) => (
+              <option key={`internalMemory_${storage}_${index}`} value={storage}>
+                {storage}
+              </option>
+            ))}
+          </select>
+        </div>
+      </fieldset>
 
       <button
+        type="button"
         className={`${styles.addButton} ${added ? styles.added : ""}`}
         onClick={handleAddToCart}
-        disabled={isAdding || added || selectedColor === "" || selectedStorage === ""}
+        disabled={isDisabled}
+        aria-disabled={isDisabled}
+        aria-describedby={error ? "cart-error" : undefined}
       >
-        {isAdding ? "Adding..." : added ? "Added" : "Add to cart"}
+        {isAdding ? "Adding..." : added ? "Added to cart" : "Add to cart"}
       </button>
+
       {error && (
-        <p className={styles.error}>An error occurred: {error}</p>
+        <p id="cart-error" className={styles.error} role="alert" aria-live="assertive">
+          {error}
+        </p>
       )}
-    </div>
+    </section>
   );
 };
+

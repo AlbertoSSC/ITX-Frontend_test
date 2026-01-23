@@ -14,6 +14,12 @@
   border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
+.fieldset {
+  border: none;
+  margin: 0;
+  padding: 0;
+}
+
 .selectorGroup {
   margin-bottom: 1.25rem;
 }

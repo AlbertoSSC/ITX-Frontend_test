@@ -5,13 +5,22 @@
   border: 1px solid rgba(255, 255, 255, 0.05);
   border-radius: 1rem;
   overflow: hidden;
-  text-decoration: none;
   transition: all 0.3s ease;
 }
 
-.card:hover {
+.cardLink {
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+  height: 100%;
+  border-radius: 1rem;
+}
+
+.card:hover,
+.card:focus-within {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.4);
+  box-shadow: 0 8px 1px #e94560;
 }
 
 .imageContainer {

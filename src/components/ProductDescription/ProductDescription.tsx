@@ -49,16 +49,19 @@ export const ProductDescription = ({ product }: ProductDescriptionProps) => {
   ].filter((spec) => spec.value !== null);
 
   return (
-    <div className={styles.description}>
-      <h2 className={styles.title}>Specifications</h2>
-      <ul className={styles.specsList}>
+    <section className={styles.description} aria-labelledby="specs-title">
+      <h2 id="specs-title" className={styles.title}>
+        Specifications
+      </h2>
+      <dl className={styles.specsList}>
         {specs.map((spec) => (
-          <li key={spec.label} className={styles.specItem}>
-            <span className={styles.specLabel}>{spec.label}</span>
-            <span className={styles.specValue}>{spec.value}</span>
-          </li>
+          <div key={spec.label} className={styles.specItem}>
+            <dt className={styles.specLabel}>{spec.label}</dt>
+            <dd className={styles.specValue}>{spec.value}</dd>
+          </div>
         ))}
-      </ul>
-    </div>
+      </dl>
+    </section>
   );
 };
+

@@ -43,7 +43,7 @@ export const ProductDetailPage = () => {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>
+        <div className={styles.loading} role="status" aria-live="polite">
           <Spinner />
           <p>Loading product...</p>
         </div>
@@ -54,7 +54,7 @@ export const ProductDetailPage = () => {
   if (error || !product) {
     return (
       <div className={styles.container}>
-        <div className={styles.error}>
+        <div className={styles.error} role="alert">
           <p>{error || "Product not found"}</p>
           <Link to="/" className={styles.backLink}>
             Back to catalog
@@ -65,32 +65,40 @@ export const ProductDetailPage = () => {
   }
 
   return (
-    <div className={styles.container}>
-      <Link to="/" className={styles.backLink}>
-        ← Back to catalog
-      </Link>
+    <article className={styles.container}>
+      <nav aria-label="Back navigation">
+        <Link to="/" className={styles.backLink}>
+          <span aria-hidden="true">←</span> Back to catalog
+        </Link>
+      </nav>
 
-      <div className={styles.productHeader}>
+      <header className={styles.productHeader}>
         <h1 className={styles.productTitle}>
           {product.brand} {product.model}
         </h1>
-        <span className={styles.productPrice}>{product.price} €</span>
-      </div>
+        <p
+          className={styles.productPrice}
+          aria-label={`Price: ${product.price} euros`}
+        >
+          {product.price} €
+        </p>
+      </header>
 
       <div className={styles.content}>
-        <div className={styles.imageColumn}>
+        <section className={styles.imageColumn} aria-label="Product image">
           <ProductImage
             imgUrl={product.imgUrl}
             brand={product.brand}
             model={product.model}
           />
-        </div>
+        </section>
 
         <div className={styles.detailsColumn}>
           <ProductDescription product={product} />
           <ProductActions product={product} />
         </div>
       </div>
-    </div>
+    </article>
   );
 };
+

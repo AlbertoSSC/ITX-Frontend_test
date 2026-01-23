@@ -7,25 +7,29 @@ interface SearchBarProps {
 
 export const SearchBar = ({ value, onChange }: SearchBarProps) => {
   return (
-    <div className={styles.searchContainer}>
-      <span className={styles.searchIcon}>🔍</span>
+    <search className={styles.searchContainer} role="search">
+      <span className={styles.searchIcon} aria-hidden="true">
+        🔍
+      </span>
       <input
-        type="text"
+        type="search"
         className={styles.searchInput}
         placeholder="Search by brand or model..."
         value={value}
         onChange={(e) => onChange(e.target.value)}
-        aria-label="Search products"
+        aria-label="Search products by brand or model"
       />
       {value && (
         <button
+          type="button"
           className={styles.clearButton}
           onClick={() => onChange("")}
           aria-label="Clear search"
         >
-          ✕
+          <span aria-hidden="true">✕</span>
         </button>
       )}
-    </div>
+    </search>
   );
 };
+

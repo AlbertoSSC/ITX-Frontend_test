@@ -45,7 +45,7 @@ export const ProductListPage = () => {
   if (loading) {
     return (
       <div className={styles.container}>
-        <div className={styles.loading}>
+        <div className={styles.loading} role="status" aria-live="polite">
           <Spinner />
           <p>Loading products...</p>
         </div>
@@ -56,32 +56,41 @@ export const ProductListPage = () => {
   if (error) {
     return (
       <div className={styles.container}>
-        <div className={styles.error}>
+        <div className={styles.error} role="alert">
           <p>{error}</p>
-          <button onClick={() => window.location.reload()}>Retry</button>
+          <button type="button" onClick={() => window.location.reload()}>
+            Retry
+          </button>
         </div>
       </div>
     );
   }
 
   return (
-    <div className={styles.container}>
-      <div className={styles.header}>
-        <h1 className={styles.title}>Mobile Catalog</h1>
+    <section className={styles.container} aria-labelledby="catalog-title">
+      <header className={styles.header}>
+        <h1 id="catalog-title" className={styles.title}>
+          Mobile Catalog
+        </h1>
         <SearchBar value={searchTerm} onChange={setSearchTerm} />
-      </div>
+      </header>
 
-      {filteredProducts.length === 0 ? (
-        <div className={styles.noResults}>
-          <p>No products found for "{searchTerm}"</p>
-        </div>
-      ) : (
-        <div className={styles.grid}>
+      <p className={styles.resultCount} role="status" aria-live="polite">
+        {filteredProducts.length === 0
+          ? `No products found for "${searchTerm}"`
+          : `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""}`}
+      </p>
+
+      {filteredProducts.length > 0 && (
+        <ul className={styles.grid} role="list" aria-label="Product catalog">
           {filteredProducts.map((product) => (
-            <ProductCard key={product.id} product={product} />
+            <li key={product.id}>
+              <ProductCard product={product} />
+            </li>
           ))}
-        </div>
+        </ul>
       )}
-    </div>
+    </section>
   );
 };
+
