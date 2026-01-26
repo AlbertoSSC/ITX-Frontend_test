@@ -55,7 +55,7 @@ describe("ProductCard", () => {
         );
 
         expect(
-            screen.getByLabelText(/view samsung galaxy s24 - 899 €/i)
+            screen.getByLabelText(/view samsung galaxy s24 - 899 euros/i)
         ).toBeInTheDocument();
     });
 });

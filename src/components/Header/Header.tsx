@@ -4,32 +4,15 @@ import { useCart } from "../../context/CartContext";
 
 import styles from "./Header.module.css";
 
-interface Breadcrumb {
-  label: string;
-  path: string;
-}
+
+
+import { buildBreadcrumbs } from "../Breadcrumbs/breadcrumbs";
 
 export const Header = () => {
   const { cartCount } = useCart();
   const location = useLocation();
 
-  const getBreadcrumbs = (): Breadcrumb[] => {
-    const paths = location.pathname.split("/").filter(Boolean);
-
-    if (paths.length === 0) {
-      return [{ label: "Home", path: "/" }];
-    }
-
-    const breadcrumbs: Breadcrumb[] = [{ label: "Home", path: "/" }];
-
-    if (paths[0] === "product" && paths[1]) {
-      breadcrumbs.push({ label: "Product", path: location.pathname });
-    }
-
-    return breadcrumbs;
-  };
-
-  const breadcrumbs = getBreadcrumbs();
+  const breadcrumbs = buildBreadcrumbs(location.pathname);
 
   return (
     <header className={styles.container}>

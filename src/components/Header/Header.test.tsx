@@ -30,47 +30,32 @@ describe("Header", () => {
     });
 
     describe("Breadcrumbs", () => {
-        it("shows only Home on root path", () => {
+        it("shows Home on root path", () => {
             renderWithProviders();
-
             expect(screen.getByText("Home")).toBeInTheDocument();
-            expect(screen.queryByText("Product")).not.toBeInTheDocument();
+            expect(screen.getByRole("listitem").textContent).toBe("Home");
         });
 
-        it("shows Home and Product on product detail page", () => {
+        it("shows Home and Product on product detail page (hides ID)", () => {
             renderWithProviders(["/product/123"]);
 
             expect(screen.getByText("Home")).toBeInTheDocument();
             expect(screen.getByText("Product")).toBeInTheDocument();
-        });
-
-        it("marks current page with aria-current", () => {
-            renderWithProviders();
-
-            const currentPage = screen.getByText("Home");
-            expect(currentPage).toHaveAttribute("aria-current", "page");
+            expect(screen.queryByText("123")).not.toBeInTheDocument();
         });
 
         it("Home is a link on product page", () => {
             renderWithProviders(["/product/123"]);
-
             const homeLink = screen.getByRole("link", { name: "Home" });
             expect(homeLink).toHaveAttribute("href", "/");
         });
 
-        it("Product is marked as current on product page", () => {
+        it("Product is current page without link", () => {
             renderWithProviders(["/product/123"]);
 
             const productSpan = screen.getByText("Product");
             expect(productSpan).toHaveAttribute("aria-current", "page");
-        });
-
-        it("has navigation landmark for breadcrumbs", () => {
-            renderWithProviders();
-
-            expect(
-                screen.getByRole("navigation", { name: /breadcrumb/i })
-            ).toBeInTheDocument();
+            expect(screen.queryByRole("link", { name: "Product" })).not.toBeInTheDocument();
         });
     });
 

@@ -11,7 +11,7 @@ const TestComponent = () => {
             <span data-testid="count">{cartCount}</span>
             <button
                 onClick={() =>
-                    addToCart({ id: "1", colorCode: "Black", storageCode: "128GB" })
+                    addToCart({ id: "1", colorCode: 0, storageCode: 0 })
                 }
             >
                 Add

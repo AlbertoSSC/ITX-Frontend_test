@@ -22,6 +22,18 @@ const mockProduct = {
     weight: "172",
     colors: ["Black", "White", "Blue"],
     internalMemory: ["128GB", "256GB", "512GB"],
+    options: {
+        colors: [
+            { code: 1000, name: "Black" },
+            { code: 1001, name: "White" },
+            { code: 1002, name: "Blue" },
+        ],
+        storages: [
+            { code: 2000, name: "128GB" },
+            { code: 2001, name: "256GB" },
+            { code: 2002, name: "512GB" },
+        ],
+    },
 };
 
 const renderWithProviders = (product = mockProduct) => {
@@ -51,7 +63,7 @@ describe("ProductActions", () => {
         renderWithProviders();
 
         const colorSelect = screen.getByLabelText(/color/i);
-        expect(colorSelect).toHaveValue("Black");
+        expect(colorSelect).toHaveValue("1000");
 
         const options = colorSelect.querySelectorAll("option");
         expect(options).toHaveLength(3);
@@ -61,7 +73,7 @@ describe("ProductActions", () => {
         renderWithProviders();
 
         const storageSelect = screen.getByLabelText(/storage/i);
-        expect(storageSelect).toHaveValue("128GB");
+        expect(storageSelect).toHaveValue("2000");
 
         const options = storageSelect.querySelectorAll("option");
         expect(options).toHaveLength(3);
@@ -73,7 +85,7 @@ describe("ProductActions", () => {
         const colorSelect = screen.getByLabelText(/color/i);
         await userEvent.selectOptions(colorSelect, "White");
 
-        expect(colorSelect).toHaveValue("White");
+        expect(colorSelect).toHaveValue("1001");
     });
 
     it("allows changing storage selection", async () => {
@@ -82,7 +94,7 @@ describe("ProductActions", () => {
         const storageSelect = screen.getByLabelText(/storage/i);
         await userEvent.selectOptions(storageSelect, "256GB");
 
-        expect(storageSelect).toHaveValue("256GB");
+        expect(storageSelect).toHaveValue("2001");
     });
 
     it("adds product to cart when button is clicked", async () => {
@@ -102,8 +114,8 @@ describe("ProductActions", () => {
                     method: "POST",
                     body: JSON.stringify({
                         id: "1",
-                        colorCode: "Black",
-                        storageCode: "128GB",
+                        colorCode: 1000,
+                        storageCode: 2000,
                     }),
                 })
             );

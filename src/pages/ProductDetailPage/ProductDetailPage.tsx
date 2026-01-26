@@ -21,15 +21,20 @@ export const ProductDetailPage = () => {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProduct = async () => {
       if (!id) return;
 
       try {
         setLoading(true);
         setError(null);
-        const data = await getProductById(id);
+        const data = await getProductById(id, controller.signal);
         setProduct(data);
       } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") {
+          return;
+        }
         setError("Error loading product");
         console.error(err);
       } finally {
@@ -38,6 +43,10 @@ export const ProductDetailPage = () => {
     };
 
     fetchProduct();
+
+    return () => {
+      controller.abort();
+    };
   }, [id]);
 
   if (loading) {
@@ -78,9 +87,10 @@ export const ProductDetailPage = () => {
         </h1>
         <p
           className={styles.productPrice}
-          aria-label={`Price: ${product.price} euros`}
+          aria-label={`Price: ${product.price ? `${product.price} euros` : "unavailable"
+            }`}
         >
-          {product.price} €
+          {product.price ? `${product.price} €` : "Price unavailable"}
         </p>
       </header>
 
@@ -101,4 +111,3 @@ export const ProductDetailPage = () => {
     </article>
   );
 };
-

@@ -44,7 +44,7 @@ export const ProductDescription = ({ product }: ProductDescriptionProps) => {
           : primaryCamera) || null,
     },
     { label: "Secondary Camera", value: secondaryCmera },
-    { label: "Dimensions", value: dimentions },
+    { label: "Dimentions", value: dimentions },
     { label: "Weight", value: weight ? `${weight} g` : null },
   ].filter((spec) => spec.value !== null);
 

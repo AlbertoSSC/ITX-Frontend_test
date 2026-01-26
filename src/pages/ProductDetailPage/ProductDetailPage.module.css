@@ -8,7 +8,7 @@
   display: inline-flex;
   align-items: center;
   gap: 0.5rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   text-decoration: none;
   font-size: 0.95rem;
   margin-bottom: 1.5rem;
@@ -16,7 +16,7 @@
 }
 
 .backLink:hover {
-  color: #e94560;
+  color: var(--color-primary);
 }
 
 .productHeader {
@@ -31,14 +31,14 @@
 .productTitle {
   font-size: 2rem;
   font-weight: 700;
-  color: #fff;
+  color: var(--color-text-primary);
   margin: 0;
 }
 
 .productPrice {
   font-size: 2rem;
   font-weight: 700;
-  color: #e94560;
+  color: var(--color-primary);
 }
 
 .content {
@@ -67,7 +67,7 @@
   justify-content: center;
   min-height: 400px;
   gap: 1rem;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
 }
 
 @media (max-width: 900px) {

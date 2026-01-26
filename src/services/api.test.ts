@@ -78,8 +78,8 @@ describe("API Service", () => {
 
             const result = await addToCart({
                 id: "1",
-                colorCode: "Black",
-                storageCode: "128GB",
+                colorCode: 1000,
+                storageCode: 2000,
             });
 
             expect(result.count).toBe(1);

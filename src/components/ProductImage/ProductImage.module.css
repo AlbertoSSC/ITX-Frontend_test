@@ -5,13 +5,14 @@
   padding: 2rem;
   min-height: 400px;
   border-radius: 1.5rem;
-  background: #e8e8ed;
+  background: var(--color-bg-image);
 }
 
 .image {
   max-width: 100%;
   max-height: 350px;
   object-fit: contain;
+  border-radius: var(--radius-md);
 }
 
 @media (max-width: 900px) {

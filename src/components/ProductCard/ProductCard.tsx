@@ -1,7 +1,8 @@
 import { Link } from "react-router-dom";
 
-import type { Product } from "@/types";
+import { ProductImage } from "../ProductImage/ProductImage";
 
+import type { Product } from "@/types";
 import styles from "./ProductCard.module.css";
 
 interface ProductCardProps {
@@ -16,23 +17,23 @@ export const ProductCard = ({ product }: ProductCardProps) => {
       <Link
         to={`/product/${id}`}
         className={styles.cardLink}
-        aria-label={`View ${brand} ${model} - ${price} €`}
+        aria-label={`View ${brand} ${model} - ${price ? `${price} euros` : "Price unavailable"
+          }`}
       >
-        <div className={styles.imageContainer}>
-          <img
-            src={imgUrl}
-            alt={`${brand} ${model}`}
-            className={styles.image}
-            loading="lazy"
-          />
-        </div>
+        <ProductImage
+          imgUrl={imgUrl}
+          brand={brand}
+          model={model}
+          containerClassName={styles.imageContainer}
+          imageClassName={styles.image}
+          lazy
+        />
         <div className={styles.info}>
           <span className={styles.brand}>{brand}</span>
           <h3 className={styles.model}>{model}</h3>
-          <span className={styles.price}>{price} €</span>
+          <span className={styles.price}>{price ? `${price} €` : "Price unavailable"}</span>
         </div>
       </Link>
-    </article>
+    </article >
   );
 };
-

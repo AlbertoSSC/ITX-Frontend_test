@@ -6,6 +6,21 @@ export interface Product {
   imgUrl: string;
 }
 
+export interface ColorOption {
+  code: number;
+  name: string;
+}
+
+export interface StorageOption {
+  code: number;
+  name: string;
+}
+
+export interface ProductOptions {
+  colors: ColorOption[];
+  storages: StorageOption[];
+}
+
 export interface ProductDetail extends Product {
   cpu: string;
   ram: string;
@@ -18,12 +33,13 @@ export interface ProductDetail extends Product {
   weight: string;
   colors: string[];
   internalMemory: string[];
+  options?: ProductOptions;
 }
 
 export interface AddToCartPayload {
   id: string;
-  colorCode: string;
-  storageCode: string;
+  colorCode: number;
+  storageCode: number;
 }
 
 export interface AddToCartResponse {

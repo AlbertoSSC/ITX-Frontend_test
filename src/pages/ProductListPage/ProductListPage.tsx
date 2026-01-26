@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 
 import type { Product } from "@/types";
 import { getProducts } from "../../services/api";
+import { useDebounce } from "../../hooks/useDebounce";
 
 import { SearchBar, ProductCard, Spinner } from "@/components";
 
@@ -13,14 +14,21 @@ export const ProductListPage = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
+  const debouncedSearchTerm = useDebounce(searchTerm, 300);
+
   useEffect(() => {
+    const controller = new AbortController();
+
     const fetchProducts = async () => {
       try {
         setLoading(true);
         setError(null);
-        const data = await getProducts();
+        const data = await getProducts(controller.signal);
         setProducts(data);
       } catch (err) {
+        if (err instanceof Error && err.name === "AbortError") {
+          return;
+        }
         setError("Error loading products");
         console.error(err);
       } finally {
@@ -29,18 +37,22 @@ export const ProductListPage = () => {
     };
 
     fetchProducts();
+
+    return () => {
+      controller.abort();
+    };
   }, []);
 
   const filteredProducts = useMemo(() => {
-    if (!searchTerm.trim()) return products;
+    if (!debouncedSearchTerm.trim()) return products;
 
-    const term = searchTerm.toLowerCase();
+    const term = debouncedSearchTerm.toLowerCase();
     return products.filter(
       (product) =>
         product.brand?.toLowerCase().includes(term) ||
-        product.model?.toLowerCase().includes(term),
+        product.model?.toLowerCase().includes(term)
     );
-  }, [products, searchTerm]);
+  }, [products, debouncedSearchTerm]);
 
   if (loading) {
     return (
@@ -76,8 +88,8 @@ export const ProductListPage = () => {
       </header>
 
       <p className={styles.resultCount} role="status" aria-live="polite">
-        {filteredProducts.length === 0
-          ? `No products found for "${searchTerm}"`
+        {filteredProducts.length === 0 && debouncedSearchTerm.trim()
+          ? `No products found for "${debouncedSearchTerm}"`
           : `Showing ${filteredProducts.length} product${filteredProducts.length !== 1 ? "s" : ""}`}
       </p>
 
@@ -93,4 +105,3 @@ export const ProductListPage = () => {
     </section>
   );
 };
-

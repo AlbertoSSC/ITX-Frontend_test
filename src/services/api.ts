@@ -13,12 +13,23 @@ const CACHE_KEY = "mobileStoreCache";
 const CART_COUNT_KEY = "cartCount";
 
 const getCache = (): CacheStore => {
-  const cached = localStorage.getItem(CACHE_KEY);
-  return cached ? JSON.parse(cached) : {};
+  try {
+    const cached = localStorage.getItem(CACHE_KEY);
+    if (!cached) return {};
+    return JSON.parse(cached) as CacheStore;
+  } catch (error) {
+    console.warn("Failed to parse cache from localStorage:", error);
+    localStorage.removeItem(CACHE_KEY);
+    return {};
+  }
 };
 
 const setCache = (cache: CacheStore): void => {
-  localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  try {
+    localStorage.setItem(CACHE_KEY, JSON.stringify(cache));
+  } catch (error) {
+    console.warn("Failed to save cache to localStorage:", error);
+  }
 };
 
 const saveToCache = (key: string, data: Product[] | ProductDetail): void => {
@@ -48,27 +59,30 @@ const getFromCache = (key: string): Product[] | ProductDetail | null => {
   return entry.data;
 };
 
-export const getProducts = async (): Promise<Product[]> => {
+export const getProducts = async (signal?: AbortSignal): Promise<Product[]> => {
   const cached = getFromCache("products");
   if (cached) {
     return cached as Product[];
   }
 
-  const response = await fetch(`${API_URL}/api/product`);
+  const response = await fetch(`${API_URL}/api/product`, { signal });
   const data: Product[] = await response.json();
 
   saveToCache("products", data);
   return data;
 };
 
-export const getProductById = async (id: string): Promise<ProductDetail> => {
+export const getProductById = async (
+  id: string,
+  signal?: AbortSignal
+): Promise<ProductDetail> => {
   const cacheKey = `product_${id}`;
   const cached = getFromCache(cacheKey);
   if (cached) {
     return cached as ProductDetail;
   }
 
-  const response = await fetch(`${API_URL}/api/product/${id}`);
+  const response = await fetch(`${API_URL}/api/product/${id}`, { signal });
   const data: ProductDetail = await response.json();
 
   saveToCache(cacheKey, data);
@@ -76,7 +90,7 @@ export const getProductById = async (id: string): Promise<ProductDetail> => {
 };
 
 export const addToCart = async (
-  payload: AddToCartPayload,
+  payload: AddToCartPayload
 ): Promise<AddToCartResponse> => {
   const response = await fetch(`${API_URL}/api/cart`, {
     method: "POST",
@@ -87,12 +101,23 @@ export const addToCart = async (
   });
   const data: AddToCartResponse = await response.json();
 
-  localStorage.setItem(CART_COUNT_KEY, String(data.count));
+  try {
+    localStorage.setItem(CART_COUNT_KEY, String(data.count));
+  } catch (error) {
+    console.warn("Failed to save cart count to localStorage:", error);
+  }
 
   return data;
 };
 
 export const getCartCount = (): number => {
-  const count = localStorage.getItem(CART_COUNT_KEY);
-  return count ? parseInt(count, 10) : 0;
+  try {
+    const count = localStorage.getItem(CART_COUNT_KEY);
+    if (!count) return 0;
+    const parsed = parseInt(count, 10);
+    return isNaN(parsed) ? 0 : parsed;
+  } catch (error) {
+    console.warn("Failed to read cart count from localStorage:", error);
+    return 0;
+  }
 };

@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 
 import { useCart } from "../../context/CartContext";
 import type { ProductDetail } from "@/types";
@@ -10,37 +10,32 @@ interface ProductActionsProps {
 }
 
 export const ProductActions = ({ product }: ProductActionsProps) => {
-  const { colors = [], internalMemory = [], id } = product;
+  const { options, id } = product;
   const { addToCart } = useCart();
 
-  const [selectedColor, setSelectedColor] = useState<string | "">("");
-  const [selectedStorage, setSelectedStorage] = useState<string | "">("");
+  const colorOptions = options?.colors ?? [];
+  const storageOptions = options?.storages ?? [];
+
+  const [selectedColorCode, setSelectedColorCode] = useState<number | null>(
+    colorOptions[0]?.code ?? null
+  );
+  const [selectedStorageCode, setSelectedStorageCode] = useState<number | null>(
+    storageOptions[0]?.code ?? null
+  );
   const [isAdding, setIsAdding] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [added, setAdded] = useState(false);
 
-  useEffect(() => {
-    if (colors.length > 0 && selectedColor === "") {
-      setSelectedColor(colors[0]);
-    }
-  }, [colors, selectedColor]);
-
-  useEffect(() => {
-    if (internalMemory.length > 0 && selectedStorage === "") {
-      setSelectedStorage(internalMemory[0]);
-    }
-  }, [internalMemory, selectedStorage]);
-
   const handleAddToCart = async () => {
-    if (selectedColor === "" || selectedStorage === "") return;
+    if (selectedColorCode === null || selectedStorageCode === null) return;
 
     try {
       setIsAdding(true);
       setError(null);
       await addToCart({
         id,
-        colorCode: selectedColor,
-        storageCode: selectedStorage,
+        colorCode: selectedColorCode,
+        storageCode: selectedStorageCode,
       });
       setAdded(true);
     } catch (err) {
@@ -52,7 +47,7 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
   };
 
   const isDisabled =
-    isAdding || added || selectedColor === "" || selectedStorage === "";
+    isAdding || added || selectedColorCode === null || selectedStorageCode === null || !product.price;
 
   return (
     <section className={styles.actions} aria-labelledby="options-title">
@@ -70,12 +65,12 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
           <select
             id="color-select"
             className={styles.select}
-            value={selectedColor}
-            onChange={(e) => setSelectedColor(e.target.value)}
+            value={selectedColorCode ?? undefined}
+            onChange={(e) => setSelectedColorCode(Number(e.target.value))}
           >
-            {colors.map((color, index) => (
-              <option key={`color_${color}_${index}`} value={color}>
-                {color}
+            {colorOptions.map((color) => (
+              <option key={`color_${color.code}`} value={color.code}>
+                {color.name}
               </option>
             ))}
           </select>
@@ -88,12 +83,12 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
           <select
             id="storage-select"
             className={styles.select}
-            value={selectedStorage}
-            onChange={(e) => setSelectedStorage(e.target.value)}
+            value={selectedStorageCode ?? undefined}
+            onChange={(e) => setSelectedStorageCode(Number(e.target.value))}
           >
-            {internalMemory.map((storage, index) => (
-              <option key={`internalMemory_${storage}_${index}`} value={storage}>
-                {storage}
+            {storageOptions.map((storage) => (
+              <option key={`storage_${storage.code}`} value={storage.code}>
+                {storage.name}
               </option>
             ))}
           </select>
@@ -119,4 +114,3 @@ export const ProductActions = ({ product }: ProductActionsProps) => {
     </section>
   );
 };
-
